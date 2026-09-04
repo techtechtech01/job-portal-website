@@ -1,7 +1,8 @@
-
+import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import app from "./app.js";
+import path from "path";
 
 dotenv.config(
     {
@@ -9,6 +10,15 @@ dotenv.config(
     }
 );
 
+//--------------code for deployment----------------
+if (process.env.NODE_ENV === "production") {
+ const dirpath = path.resolve();
+ app.use(express.static('./frontend/dist'));
+ app.get('*splat', (req, res) => {
+   res.sendFile(path.resolve(dirpath, './frontend/dist', 'index.html'));
+ });
+   
+}
 const startServer = async () => {
   try {
            
